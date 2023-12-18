@@ -17,6 +17,7 @@ const router = createRouter({
     routes
 });
 
+//protecting dashboard route
 router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('authToken') // Check if token exists
     
