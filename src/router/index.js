@@ -1,17 +1,25 @@
-import Home from '../views/Home.vue'
-import About from '../views/About.vue'
+import Login from '../views/auth/Login.vue'
+import Registration from '../views/auth/Registration.vue'
+import Dashboard from '../views/dashboard/Dashboard.vue'
 
 const routes = [
     {
-        path: '/',
-        component: Home,
-        name: 'Home'
+        path: '/user/dashboard',
+        component: Dashboard,
+        name: 'Dashboard',
+        meta: { requiresAuth: true }
     },
     {
-        path: '/about',
-        component: About,
-        name: 'About'
+        path: '/auth/register',
+        component: Registration,
+        name: 'Registration'
+    },
+    {
+        path: '/auth/login',
+        component: Login,
+        name: 'Login'
     },
 ]
+
 
 export default routes
