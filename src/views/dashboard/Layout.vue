@@ -321,12 +321,12 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="wd-30 ht-30 rounded-circle" src="" alt="profile">
+                            <img class="wd-30 ht-30 rounded-circle" :src="$image" alt="profile">
                         </a>
                         <div class="dropdown-menu p-0" aria-labelledby="profileDropdown">
                             <div class="d-flex flex-column align-items-center border-bottom px-5 py-3">
                                 <div class="mb-3">
-                                    <img class="wd-80 ht-80 rounded-circle" src="" alt="">
+                                    <img class="wd-80 ht-80 rounded-circle" :src="$image" alt="">
                                 </div>
                                 <div class="text-center">
                                     <p class="tx-16 fw-bolder">mamoon</p>
@@ -366,14 +366,10 @@
                                     </a>
                                 </li>
                                 <li class="dropdown-item py-2">
-                                    <form method="POST" action="" class="text-body ms-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out me-2 icon-md">
-                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                            <polyline points="16 17 21 12 16 7"></polyline>
-                                            <line x1="21" y1="12" x2="9" y2="12"></line>
-                                        </svg>
-                                        <button type="submit" class="btn">Logout</button>
-                                    </form>
+                                    <a href="javascript:;" @click.prevent="logout" class="text-body ms-0">
+                                        <i class="me-2 icon-md" data-feather="log-out"></i>
+                                        <span>Log Out</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -400,10 +396,24 @@
     </BaseLayout>
 </template>
 <script>
+    import axios_client from '../../axios-client';
     import BaseLayout from '../BaseLayout.vue';
     export default{
         components:{
             BaseLayout
+        },
+        methods:{
+            logout(){
+                axios_client.post('/user/logout')
+                    .then(({data})=>{
+                        localStorage.clear();
+                        // this.$router.push('/');
+                        console.log(data);
+                    })
+                    .catch((errors)=>{
+                        console.log(errors);
+                    })
+            }
         }
     }
 </script>

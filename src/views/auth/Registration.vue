@@ -6,22 +6,22 @@
         <h5 class="text-warning fw-normal mb-4">
             Create admin account.
         </h5>
-        <form method="POST" action="" enctype="multipart/form-data" class="forms-sample">
+        <form @submit.prevent="createUser" class="forms-sample">
             <div class="mb-3">
                 <label for="exampleInputUsername1" class="form-label text-info">Name</label>
-                <input type="text" class="form-control" id="exampleInputUsername1" autocomplete="Username" placeholder="Your name" name="name" />
+                <input type="text" v-model="form.name" class="form-control" id="exampleInputUsername1" autocomplete="Username" placeholder="Your name" name="name" />
             </div>
             <div class="mb-3">
                 <label for="userEmail" class="form-label text-info">Email address</label>
-                <input type="email" class="form-control" id="userEmail" placeholder="Email" name="email" />
+                <input type="email" v-model="form.email" class="form-control" id="userEmail" placeholder="Email" name="email" />
             </div>
             <div class="mb-3">
                 <label class="form-label text-info" for="formFile">Image Upload</label>
-                <input class="form-control" name="image" type="file" id="formFile">
+                <input class="form-control"  @input="form.image = $event.target.files[0]" name="image" type="file" id="formFile">
             </div>
             <div class="mb-3">
                 <label for="userPassword" class="form-label text-info">Password</label>
-                <input type="password" class="form-control" id="userPassword" autocomplete="current-password" placeholder="Password" name="password" />
+                <input type="password" v-model="form.password" class="form-control" id="userPassword" autocomplete="current-password" placeholder="Password" name="password" />
             </div>
             <div class="form-check mb-3">
                 <input type="checkbox" class="form-check-input" id="authCheck" />
@@ -35,16 +35,41 @@
                 </button>
             </div>
         </form>
-        <router-link to="/auth/login" class="d-block mt-3 text-info">Already a user? Sign in</router-link>
+        <router-link to="/" class="d-block mt-3 text-info">Already a user? Sign in</router-link>
     </div>
 </div>
     </Layout>
 </template>
 <script>
-  import Layout from './Layout.vue';
+  import axios_client from '../../axios-client';
+import Layout from './Layout.vue';
   export default{
+    data(){
+        return{
+            form:{
+                name : '',
+                email : '',
+                password : '',
+                image : null
+            }
+        }
+    },
     components:{
         Layout
+    },
+    methods:{
+        createUser(){
+            alert('enter')
+            axios_client.postForm('/v1/user/register', this.form)
+                .then(({data})=>{
+                    localStorage.setItem('authToken', data.token)
+                    localStorage.setItem('user', JSON.stringify(data.user))
+                    this.$router.push('/user/dashboard');
+                })
+                .catch((errors)=>{
+                    console.log(errors);
+                })
+        }
     }
   }
 </script>

@@ -6,15 +6,18 @@
         <h5 class="text-warning fw-normal mb-4">
             Admin Login
         </h5>
-        <form class="forms-sample" method="POST" action="">
+        <h2 class="text-danger" v-show="errors.warning">{{ errors.warning }}</h2>
+        <form class="forms-sample" @submit.prevent="login">
             <div class="mb-3">
                 <label for="userEmail" class="form-label text-info">Email
                     address</label>
-                <input type="email" class="form-control" id="userEmail" placeholder="Email" name="email" />
+                <input type="email" v-model="form.email" class="form-control" id="userEmail" placeholder="Email" name="email" />
+                <!-- <p class="text-danger" v-if="errors.errors.email[0]"></p> -->
             </div>
             <div class="mb-3">
                 <label for="userPassword" class="form-label text-info">Password</label>
-                <input type="password" class="form-control" id="userPassword" autocomplete="current-password" placeholder="Password" name="password" />
+                <input type="password" v-model="form.password" class="form-control" id="userPassword" autocomplete="current-password" placeholder="Password" name="password" />
+                <!-- <p class="text-danger" v-if="errors.errors.password[0]"></p> -->
             </div>
             <div class="form-check mb-3">
                 <input type="checkbox" class="form-check-input" id="authCheck" />
@@ -34,10 +37,33 @@
 </Layout>
 </template>
 <script>
-    import Layout from './Layout.vue';
+    import axios_client from '../../axios-client';
+import Layout from './Layout.vue';
     export default{
+        data(){
+            return {
+                form:{
+                    email : '',
+                    password : ''
+                },
+                errors : ''
+            }
+        },
         components:{
             Layout
+        },
+        methods:{
+            login(){
+                axios_client.post('/v1/user/login', this.form)
+                    .then(({data})=>{
+                        localStorage.setItem('authToken', data.token)
+                        localStorage.setItem('user', JSON.stringify(data.user))
+                        this.$router.push('/user/dashboard')
+                    })
+                    .catch((errors)=>{
+                        this.errors = errors.response.data
+                    })
+            }
         }
     }
 </script>

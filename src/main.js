@@ -17,18 +17,25 @@ const router = createRouter({
     routes
 });
 
+
 //protecting dashboard route
 router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('authToken') // Check if token exists
     
     if (to.meta.requiresAuth && !isAuthenticated) {
-      next('/auth/login') // Redirect to login if authentication is required but user is not logged in
+      next('/') // Redirect to login if authentication is required but user is not logged in
     } else {
       next() // Continue to the requested route
     }
 })
 
 const app = createApp(App)
+
+app.config.globalProperties.$getUser = () =>{
+  const token = localStorage.getItem('authToken');
+  const user =  JSON.parse(localStorage.getItem('user'));
+  return [token, user];
+};
 
 app.use(router)
 

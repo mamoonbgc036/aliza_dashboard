@@ -8,6 +8,10 @@
     export default{
         components:{
             Layout
+        },
+        mounted(){
+            let data = this.$getUser()[0];
+            console.log(data);
         }
     }
 </script>
