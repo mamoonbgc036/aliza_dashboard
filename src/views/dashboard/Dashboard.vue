@@ -1,17 +1,13 @@
 <template>
     <Layout>
-        <h1>main content</h1>
+        <h1>Welcome to Home</h1>
     </Layout>
 </template>
 <script>
-    import Layout from './Layout.vue';
-    export default{
-        components:{
-            Layout
-        },
-        mounted(){
-            let data = this.$getUser()[0];
-            console.log(data);
-        }
+import Layout from './Layout.vue';
+export default{
+    components:{
+        Layout
     }
+}
 </script>

@@ -41,10 +41,10 @@
                     <div class="collapse" id="emails">
                         <ul class="nav sub-menu">
                             <li class="nav-item">
-                                <a href="" class="nav-link">Create Product</a>
+                                <router-link to="/user/product/create" class="nav-link">Create Product</router-link>
                             </li>
                             <li class="nav-item">
-                                <a href="" class="nav-link">All Product</a>
+                                <router-link to="/user/product/index" class="nav-link">All Product</router-link>
                             </li>
 
                         </ul>
@@ -321,16 +321,16 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="wd-30 ht-30 rounded-circle" :src="$image" alt="profile">
+                            <img class="wd-30 ht-30 rounded-circle" :src="user.image" alt="profile">
                         </a>
                         <div class="dropdown-menu p-0" aria-labelledby="profileDropdown">
                             <div class="d-flex flex-column align-items-center border-bottom px-5 py-3">
                                 <div class="mb-3">
-                                    <img class="wd-80 ht-80 rounded-circle" :src="$image" alt="">
+                                    <img class="wd-80 ht-80 rounded-circle" :src="user.image" alt="">
                                 </div>
                                 <div class="text-center">
-                                    <p class="tx-16 fw-bolder">mamoon</p>
-                                    <p class="tx-12 text-muted">mamoon@gmail.com</p>
+                                    <p class="tx-16 fw-bolder">{{ user.name }}</p>
+                                    <p class="tx-12 text-muted">{{ user.email }}</p>
                                 </div>
                             </div>
                             <ul class="list-unstyled p-1">
@@ -380,8 +380,10 @@
 
 
         <div class="page-content">
+            <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
 
             <slot></slot>
+            </div>
 
         </div>
 
@@ -399,15 +401,23 @@
     import axios_client from '../../axios-client';
     import BaseLayout from '../BaseLayout.vue';
     export default{
+        data(){
+            return {
+                user : []
+            }
+        },
         components:{
             BaseLayout
         },
+        mounted(){
+             this.user = this.$getUser()[1];
+        },
         methods:{
             logout(){
-                axios_client.post('/user/logout')
+                axios_client.post('/v1/user/logout')
                     .then(({data})=>{
                         localStorage.clear();
-                        // this.$router.push('/');
+                        this.$router.push('/');
                         console.log(data);
                     })
                     .catch((errors)=>{
@@ -417,3 +427,8 @@
         }
     }
 </script>
+<style>
+#table{
+    width: 100%;
+}
+</style>

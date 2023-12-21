@@ -10,18 +10,22 @@
             <div class="mb-3">
                 <label for="exampleInputUsername1" class="form-label text-info">Name</label>
                 <input type="text" v-model="form.name" class="form-control" id="exampleInputUsername1" autocomplete="Username" placeholder="Your name" name="name" />
+                <p v-if="errors.name != undefined" class="text-danger">{{ errors.name[0] }}</p>
             </div>
             <div class="mb-3">
                 <label for="userEmail" class="form-label text-info">Email address</label>
                 <input type="email" v-model="form.email" class="form-control" id="userEmail" placeholder="Email" name="email" />
+                <p v-if="errors.email != undefined" class="text-danger">{{ errors.email[0] }}</p>
             </div>
             <div class="mb-3">
                 <label class="form-label text-info" for="formFile">Image Upload</label>
                 <input class="form-control"  @input="form.image = $event.target.files[0]" name="image" type="file" id="formFile">
+                <p v-if="errors.image != undefined" class="text-danger">{{ errors.image[0] }}</p>
             </div>
             <div class="mb-3">
                 <label for="userPassword" class="form-label text-info">Password</label>
                 <input type="password" v-model="form.password" class="form-control" id="userPassword" autocomplete="current-password" placeholder="Password" name="password" />
+                <p v-if="errors.password != undefined" class="text-danger">{{ errors.password[0] }}</p>
             </div>
             <div class="form-check mb-3">
                 <input type="checkbox" class="form-check-input" id="authCheck" />
@@ -51,7 +55,8 @@ import Layout from './Layout.vue';
                 email : '',
                 password : '',
                 image : null
-            }
+            },
+            errors : []
         }
     },
     components:{
@@ -59,7 +64,6 @@ import Layout from './Layout.vue';
     },
     methods:{
         createUser(){
-            alert('enter')
             axios_client.postForm('/v1/user/register', this.form)
                 .then(({data})=>{
                     localStorage.setItem('authToken', data.token)
@@ -67,7 +71,8 @@ import Layout from './Layout.vue';
                     this.$router.push('/user/dashboard');
                 })
                 .catch((errors)=>{
-                    console.log(errors);
+                    this.errors = errors.response.data.errors
+                    console.log(errors.response.data.errors);
                 })
         }
     }

@@ -12,12 +12,12 @@
                 <label for="userEmail" class="form-label text-info">Email
                     address</label>
                 <input type="email" v-model="form.email" class="form-control" id="userEmail" placeholder="Email" name="email" />
-                <!-- <p class="text-danger" v-if="errors.errors.email[0]"></p> -->
+                <p class="text-danger" v-if="errors.email != undefined">{{ errors.email[0] }}</p>
             </div>
             <div class="mb-3">
                 <label for="userPassword" class="form-label text-info">Password</label>
                 <input type="password" v-model="form.password" class="form-control" id="userPassword" autocomplete="current-password" placeholder="Password" name="password" />
-                <!-- <p class="text-danger" v-if="errors.errors.password[0]"></p> -->
+                <p class="text-danger" v-if="errors.password != undefined">{{ errors.password[0] }}</p>
             </div>
             <div class="form-check mb-3">
                 <input type="checkbox" class="form-check-input" id="authCheck" />
@@ -46,7 +46,7 @@ import Layout from './Layout.vue';
                     email : '',
                     password : ''
                 },
-                errors : ''
+                errors : []
             }
         },
         components:{
@@ -61,7 +61,13 @@ import Layout from './Layout.vue';
                         this.$router.push('/user/dashboard')
                     })
                     .catch((errors)=>{
-                        this.errors = errors.response.data
+                        if(errors.response && errors.response.data.warning != undefined){
+                            this.errors = errors.response.data
+                            console.log(errors.response.data)
+                        } else{
+                            this.errors = errors.response.data.errors
+                            console.log(errors.response.data)
+                        }
                     })
             }
         }
