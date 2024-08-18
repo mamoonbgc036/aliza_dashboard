@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router';
-import routes from './router/index.js';
+
+import router from './router/index.js';
 import './assets/vendors/core/core.css'
 import './assets/vendors/flatpickr/flatpickr.min.css'
 import './assets/fonts/feather-font/css/iconfont.css'
@@ -12,22 +12,6 @@ import './assets/js/template.js'
 
 import App from './App.vue'
 
-const router = createRouter({
-    history: createWebHistory(),
-    routes
-});
-
-
-//protecting dashboard route
-router.beforeEach((to, from, next) => {
-    const isAuthenticated = localStorage.getItem('authToken') // Check if token exists
-    
-    if (to.meta.requiresAuth && !isAuthenticated) {
-      next('/') // Redirect to login if authentication is required but user is not logged in
-    } else {
-      next() // Continue to the requested route
-    }
-})
 
 const app = createApp(App)
 
