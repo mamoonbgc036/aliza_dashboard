@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:8000/api'; // Replace with your server URL
+const baseURL = 'hrm.cims.viewdemo.xyz/api'; // Replace with your server URL
 
 const axios_client = axios.create({
   baseURL,
 });
 
 axios_client.interceptors.request.use(config => {
-  config.headers.Authorization = `Bearer `+localStorage.getItem('authToken')
+  config.headers.Authorization = `Bearer ` + localStorage.getItem('authToken')
   return config;
 })
 
